@@ -67,3 +67,37 @@ test("Insert after", () => {
     </Form>`)
   );
 });
+
+test("Insert before", () => {
+  const templateList: Array<Template> = [
+    {
+      id: "parent",
+      type: "primary",
+      xml: `<Form>
+                    <Field name="second"/>
+                    <Field name="third"/>
+                </Form>`,
+    },
+    {
+      id: "child1",
+      type: "primary",
+      parent: "parent",
+      xml: `<Form>
+                    <Query selector="Field[name='second']" position="before">
+                        <Field name="first"/>
+                    </Query>
+                </Form>`,
+    },
+  ];
+
+  const parentTemplateId = "parent";
+  const parsed = LWeb.compileTemplate(parentTemplateId, templateList);
+  console.log(parsed);
+  expect(parsed).toBe(
+    format(`<Form>
+        <Field name="first"/>
+        <Field name="second"/>
+        <Field name="third"/>
+    </Form>`)
+  );
+});
